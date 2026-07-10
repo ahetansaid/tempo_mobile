@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>TEMPO — Prototype cliquable</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Prototype cliquable de TEMPO — réservation et gestion de clientèle pour coiffeurs et barbiers du Bénin. 23 écrans, 4 surfaces.">
+<meta name="theme-color" content="#141B34">
+<link rel="icon" href="data:image/svg+xml,<svg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'><rect%20width='32'%20height='32'%20rx='7'%20fill='%23141B34'/><g%20fill='none'%20stroke='%23E0A458'%20stroke-width='2.4'%20stroke-linecap='round'><circle%20cx='16'%20cy='16'%20r='9'%20stroke-dasharray='45,12'%20stroke-dashoffset='-5'/><path%20d='M16,16V9'/><path%20d='M16,16h6'/></g></svg>">
+<meta property="og:title" content="TEMPO — Prototype">
+<meta property="og:description" content="Le bon créneau, au bon moment. Prototype cliquable — 23 écrans, 4 surfaces.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="assets/accueil_tempo.webp">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+:root{
+  --bg:#EBE4DA; --bg2:#E3DACE; --panel:#FFFFFF; --ink:#1E1B16; --muted:#6B6760;
+  --line:#E1DACF; --brass:#E0A458; --brass-ink:#9A6316; --indigo:#141B34;
+  --shadow:0 10px 40px rgba(20,27,52,.14);
+  --stage1:#1b2547; --stage2:#0c1122; --radius:18px;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#0E1428; --bg2:#0a0f20; --panel:#161E39; --ink:#ECE7DE; --muted:#9C99A8;
+    --line:#26304F; --brass-ink:#E0A458; --shadow:0 10px 40px rgba(0,0,0,.5);
+    --stage1:#141b34; --stage2:#070a16; }
+}
+:root[data-theme="light"]{ --bg:#EBE4DA; --bg2:#E3DACE; --panel:#FFFFFF; --ink:#1E1B16; --muted:#6B6760;
+  --line:#E1DACF; --brass-ink:#9A6316; --shadow:0 10px 40px rgba(20,27,52,.14); --stage1:#1b2547; --stage2:#0c1122; }
+:root[data-theme="dark"]{ --bg:#0E1428; --bg2:#0a0f20; --panel:#161E39; --ink:#ECE7DE; --muted:#9C99A8;
+  --line:#26304F; --brass-ink:#E0A458; --shadow:0 10px 40px rgba(0,0,0,.5); --stage1:#141b34; --stage2:#070a16; }
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+h1,h2,h3{font-weight:700;letter-spacing:-.02em;text-wrap:balance;margin:0}
+.tnum{font-variant-numeric:tabular-nums}
+header{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.hd{display:flex;align-items:center;gap:16px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.mark{width:38px;height:38px;flex:none;border-radius:10px;background:var(--indigo);
+  display:grid;place-items:center;box-shadow:0 2px 8px rgba(20,27,52,.25)}
+.brand b{font-size:19px;letter-spacing:.12em}
+.brand span{color:var(--muted);font-size:12.5px;display:block;margin-top:-2px}
+.hd .sp{flex:1}
+.themebtn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted)}
+.themebtn:hover{color:var(--ink);border-color:var(--brass)}
+.intro{padding:34px 0 14px}
+.eyebrow{color:var(--brass-ink);font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.intro h1{font-size:clamp(28px,5vw,46px);line-height:1.03;margin:12px 0 10px}
+.intro p{max-width:60ch;color:var(--muted);font-size:16.5px;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;color:var(--muted);background:var(--panel)}
+.chip b{color:var(--ink);font-weight:600}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:26px 0 6px}
+.tab{border:1px solid var(--line);background:var(--panel);border-radius:14px;padding:10px 16px;
+  display:flex;flex-direction:column;gap:1px;min-width:132px;transition:.15s}
+.tab b{font-size:14.5px;font-weight:700}
+.tab small{color:var(--muted);font-size:11.5px}
+.tab[aria-selected="true"]{border-color:var(--brass);background:color-mix(in srgb,var(--brass) 14%,var(--panel));box-shadow:0 4px 16px rgba(224,164,88,.18)}
+.tab[aria-selected="true"] b{color:var(--brass-ink)}
+.stage-grid{display:grid;grid-template-columns:150px 1fr 300px;gap:22px;margin:14px 0 40px;align-items:start}
+@media(max-width:940px){.stage-grid{grid-template-columns:1fr}}
+.rail{position:sticky;top:78px}
+@media(max-width:940px){.rail{position:static}}
+.rail h4{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 8px 2px;font-weight:700}
+.railwrap{display:flex;flex-direction:column;gap:7px}
+@media(max-width:940px){.railwrap{flex-direction:row;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}}
+.thumb{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--panel);
+  display:flex;gap:9px;align-items:center;padding:6px;text-align:left;transition:.15s;position:relative}
+@media(max-width:940px){.thumb{flex:none;width:190px;scroll-snap-align:start}}
+.thumb img{width:34px;height:46px;object-fit:cover;object-position:top;border-radius:5px;flex:none;background:#ccc}
+.thumb span{font-size:12px;font-weight:600;line-height:1.2}
+.thumb small{display:block;color:var(--muted);font-size:10px;font-weight:500}
+.thumb:hover{border-color:var(--brass)}
+.thumb[aria-current="true"]{border-color:var(--brass);background:color-mix(in srgb,var(--brass) 12%,var(--panel))}
+.railsep{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:12px 2px 4px;font-weight:700}
+.deviceStage{background:radial-gradient(120% 120% at 50% 0%,var(--stage1),var(--stage2));
+  border-radius:24px;padding:26px 18px;display:flex;flex-direction:column;align-items:center;gap:16px;
+  box-shadow:var(--shadow);min-height:460px;position:relative;overflow:hidden}
+.deviceStage::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 40% at 50% -5%,rgba(224,164,88,.16),transparent 70%);pointer-events:none}
+.navrow{display:flex;align-items:center;gap:14px;width:100%;justify-content:center;z-index:2}
+.arrow{width:44px;height:44px;flex:none;border-radius:50%;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);color:#fff;display:grid;place-items:center;transition:.15s}
+.arrow:hover{background:rgba(224,164,88,.9);color:var(--indigo);border-color:transparent}
+.arrow:disabled{opacity:.3;cursor:default}
+.stepwrap{flex:1;max-width:520px;display:flex;justify-content:center}
+.phone{--sbh:46px;position:relative;border-radius:56px;padding:13px;
+  background:linear-gradient(152deg,#4a4d55 0%,#17181c 44%,#2f3137 78%,#0e0f12 100%);
+  box-shadow:0 34px 80px rgba(0,0,0,.6),0 2px 0 rgba(255,255,255,.12) inset,0 0 0 1px rgba(0,0,0,.7)}
+.phone::before,.phone::after{content:"";position:absolute;width:3px;border-radius:3px;background:linear-gradient(90deg,#0a0b0e,#3d3f45 60%,#0a0b0e)}
+.phone::before{left:-2px;top:154px;height:96px}
+.phone::after{right:-2px;top:176px;height:72px}
+.phone .screen{position:relative;border-radius:45px;overflow:hidden;background:#fff;
+  height:min(72vh,700px);width:calc(min(72vh,700px) * 0.462);
+  box-shadow:0 0 0 3px #05070f,0 0 0 4px rgba(255,255,255,.04) inset}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:96px;height:29px;
+  background:#000;border-radius:999px;z-index:8;box-shadow:0 0 0 1px rgba(255,255,255,.06)}
+.island::after{content:"";position:absolute;top:8px;right:12px;width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#2b3b52,#05070d)}
+.statusbar{position:absolute;top:0;left:0;right:0;height:var(--sbh);z-index:7;
+  display:flex;align-items:flex-start;justify-content:space-between;padding:15px 26px 0;font-size:14px;font-weight:600}
+.sbtime{letter-spacing:.01em}
+.sbicons{display:flex;align-items:center;gap:6px}
+.screen.tone-light .statusbar{background:#FFF7EF;color:#141B34}
+.screen.tone-dark .statusbar{background:#141B34;color:#fff}
+.phone .scroller{top:var(--sbh)}
+.homebar{position:absolute;bottom:9px;left:50%;transform:translateX(-50%);width:37%;height:5px;border-radius:999px;z-index:7}
+.screen.tone-light .homebar{background:#141B34;opacity:.82}
+.screen.tone-dark .homebar{background:#fff;opacity:.9}
+.browser{width:min(880px,94%);background:var(--indigo);border-radius:14px;padding:0;box-shadow:0 24px 60px rgba(0,0,0,.5);overflow:hidden}
+.bbar{height:42px;display:flex;align-items:center;gap:8px;padding:0 14px;background:#0e1730}
+.dot{width:11px;height:11px;border-radius:50%}
+.burl{flex:1;height:24px;background:rgba(255,255,255,.08);border-radius:6px;color:#aeb6cf;font-size:11.5px;display:flex;align-items:center;padding:0 12px;margin-left:8px}
+.browser .screen{position:relative;overflow:hidden;background:#fff;height:min(560px,62vh);border-radius:0}
+.scroller{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.scroller img{display:block;width:100%;height:auto}
+.scrollhint{position:absolute;top:10px;right:10px;z-index:5;background:rgba(5,7,15,.55);color:#fff;font-size:10px;padding:3px 8px;border-radius:999px;pointer-events:none;opacity:.85;display:flex;align-items:center;gap:5px}
+.phone .scrollhint{top:calc(var(--sbh) + 8px)}
+.hotspot{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);z-index:7;
+  background:var(--brass);color:var(--indigo);font-weight:700;font-size:14px;letter-spacing:.01em;
+  padding:13px 22px;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.35),0 0 0 6px rgba(224,164,88,.18);
+  display:inline-flex;align-items:center;gap:9px;white-space:nowrap;max-width:88%;transition:.15s}
+.hotspot:hover{filter:brightness(1.05);box-shadow:0 8px 24px rgba(0,0,0,.4),0 0 0 9px rgba(224,164,88,.28)}
+.hotspot:active{transform:translateX(-50%) scale(.97)}
+.hotspot svg{flex:none}
+body.noguide .hotspot{box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.dots{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;z-index:2}
+.pdot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.22);transition:.15s;border:none;padding:0}
+.pdot[aria-current="true"]{background:var(--brass);width:22px;border-radius:4px}
+.controls{display:flex;gap:10px;align-items:center;z-index:2}
+.gbtn{font-size:12px;color:#cfd4e6;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:6px 13px;display:inline-flex;gap:7px;align-items:center;transition:.15s}
+.gbtn:hover{border-color:var(--brass);color:#fff}
+.gbtn.on{background:var(--brass);color:var(--indigo);border-color:transparent;font-weight:600}
+.info{position:sticky;top:78px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+@media(max-width:940px){.info{position:static}}
+.info .step{color:var(--brass-ink);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.info h3{font-size:21px;margin:8px 0 10px}
+.info p{color:var(--muted);font-size:14px;margin:0 0 14px}
+.tolook{border-top:1px solid var(--line);padding-top:14px;font-size:13px}
+.tolook b{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.tolook .cta{display:inline-flex;align-items:center;gap:8px;color:var(--brass-ink);font-weight:600}
+.legend{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+.legend b{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.st{display:flex;align-items:center;gap:8px;font-size:12.5px;margin:5px 0}
+.sdot{width:10px;height:10px;border-radius:3px;flex:none}
+.sys{border-top:1px solid var(--line);background:var(--bg2)}
+.sysgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:28px;padding:40px 0}
+.sys h2{font-size:14px;letter-spacing:.02em;margin-bottom:14px}
+.sw{display:flex;align-items:center;gap:10px;font-size:13px;margin:7px 0;color:var(--muted)}
+.sw i{width:22px;height:22px;border-radius:6px;flex:none;border:1px solid rgba(0,0,0,.08)}
+.sw code{font-size:11px;background:color-mix(in srgb,var(--ink) 8%,transparent);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.typ{font-size:13px;color:var(--muted);margin:7px 0}
+.typ b{color:var(--ink)}
+.foot{padding:22px 0 40px;color:var(--muted);font-size:12.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;border-top:1px solid var(--line)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+</style>
+
+<header><div class="wrap hd">
+  <div class="brand"><div class="mark"></div><div><b>TEMPO</b><span>Prototype cliquable</span></div></div>
+  <div class="sp"></div>
+  <button class="themebtn" id="theme" title="Basculer le thème" aria-label="Basculer le thème"></button>
+</div></header>
+
+<div class="wrap intro">
+  <div class="eyebrow">Maquette interactive · Stitch</div>
+  <h1>Le bon créneau, au bon moment.</h1>
+  <p>Réservation et gestion de clientèle pour les coiffeurs et barbiers du Bénin. Choisis une
+  surface, puis avance dans le parcours avec le bouton doré, les flèches ou les touches ←/→.</p>
+  <div class="meta">
+    <span class="chip"><b>23</b> écrans</span>
+    <span class="chip"><b>4</b> surfaces</span>
+    <span class="chip">Cotonou · <b>FCFA</b></span>
+  </div>
+  <div class="tabs" id="tabs" role="tablist"></div>
+</div>
+
+<div class="wrap"><div class="stage-grid">
+  <nav class="rail"><h4>Écrans</h4><div class="railwrap" id="rail"></div></nav>
+  <div class="deviceStage">
+    <div class="navrow">
+      <button class="arrow" id="prev" aria-label="Écran précédent"></button>
+      <div class="stepwrap"><div id="device"></div></div>
+      <button class="arrow" id="next" aria-label="Écran suivant"></button>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="controls"><button class="gbtn on" id="guide" aria-pressed="true"></button></div>
+  </div>
+  <aside class="info" id="info"></aside>
+</div></div>
+
+<div class="sys"><div class="wrap sysgrid">
+  <div><h2>Couleurs</h2>
+    <div class="sw"><i style="background:#141B34"></i> Indigo Nuit <code>#141B34</code></div>
+    <div class="sw"><i style="background:#E0A458"></i> Laiton <code>#E0A458</code></div>
+    <div class="sw"><i style="background:#F6F4F1"></i> Sable <code>#F6F4F1</code></div>
+    <div class="sw"><i style="background:#FFFFFF"></i> Blanc <code>#FFFFFF</code></div></div>
+  <div><h2>Statuts de réservation</h2>
+    <div class="st"><span class="sdot" style="background:#D9880E"></span> En attente</div>
+    <div class="st"><span class="sdot" style="background:#16A34A"></span> Confirmée</div>
+    <div class="st"><span class="sdot" style="background:#6B6760"></span> Terminée</div>
+    <div class="st"><span class="sdot" style="background:#DC2626"></span> Annulée</div>
+    <div class="st"><span class="sdot" style="background:#7C2D12"></span> Absente (no-show)</div></div>
+  <div><h2>Typographie</h2>
+    <p class="typ"><b>Sora</b> — titres, tracking serré</p>
+    <p class="typ"><b>Inter</b> — texte, chiffres tabulaires</p>
+    <p class="typ">Heures 24 h · Dates FR · FCFA sans décimale</p></div>
+  <div><h2>Principes</h2>
+    <p class="typ">Contraste élevé pour Android d'entrée de gamme en plein soleil.</p>
+    <p class="typ">Le laiton n'habille que les actions et les créneaux libres.</p>
+    <p class="typ">Score de fiabilité factuel — aucun avis libre.</p></div>
+</div>
+<div class="wrap foot">
+  <span>TEMPO · dossier d'étude technique — prototype de démonstration</span>
+  <span>Écrans générés avec Google Stitch</span>
+</div></div>
+
+<script>
+const DATA = {"screens": {"recherche_liste": {"id": "recherche_liste", "title": "Recherche — liste", "desc": "La cliente arrive par QR code ou lien Instagram. Elle voit les salons proches, triés par distance, avec statut d'ouverture, score de fiabilité et prix d'appel. Aucun compte requis.", "cta": "Voir la fiche du salon", "img": "assets/recherche_liste.webp", "w": 574, "h": 1600}, "recherche_carte": {"id": "recherche_carte", "title": "Recherche — carte", "desc": "Même recherche en vue carte. Pins indigo, salon sélectionné dans une bottom-sheet avec « Réserver » et « Itinéraire ». Variante de l'écran liste.", "cta": "Réserver", "img": "assets/recherche_carte.webp", "w": 706, "h": 1600}, "profil_salon": {"id": "profil_salon", "title": "Fiche du salon", "desc": "Page publique SSR (SEO local, lien Instagram → réservation). Prestations, tarifs FCFA, galerie, horaires, score de fiabilité. CTA « Réserver » collant en bas.", "cta": "Réserver", "img": "assets/profil_salon.webp", "w": 380, "h": 1600}, "choix_cr_neau": {"id": "choix_cr_neau", "title": "Choix du créneau", "desc": "Créneaux groupés Matin / Après-midi / Soir. Trois états distincts : libre (laiton), sélectionné, pris (barré, non cliquable). Anti-double-booking rendu visible.", "cta": "Continuer", "img": "assets/choix_cr_neau.webp", "w": 702, "h": 1600}, "cr_neau_indisponible_modal": {"id": "cr_neau_indisponible_modal", "title": "Créneau indisponible", "desc": "Cas limite : le créneau vient d'être pris par quelqu'un d'autre pendant la réservation. La contrainte d'exclusion PostgreSQL traduite en UI.", "cta": "Choisir un autre créneau", "img": "assets/cr_neau_indisponible_modal.webp", "w": 702, "h": 1600}, "r_servation_invit": {"id": "r_servation_invit", "title": "Réservation invité", "desc": "Deux champs seulement : nom + téléphone (+229). Email optionnel pour le rappel. Pas de compte à créer — friction minimale.", "cta": "Confirmer la réservation", "img": "assets/r_servation_invit.webp", "w": 706, "h": 1600}, "confirmation": {"id": "confirmation", "title": "Confirmation", "desc": "Écran de succès : billet avec code de référence, statut « En attente de confirmation », invitation à installer TEMPO pour recevoir le rappel 1 h avant.", "cta": "Voir le suivi", "img": "assets/confirmation.webp", "w": 539, "h": 1600}, "suivi_rdv": {"id": "suivi_rdv", "title": "Suivi de la réservation", "desc": "La page où la cliente revient via son lien. Statut passé à « Confirmée », timeline des étapes, actions Itinéraire / Annuler.", "cta": "Recommencer le parcours", "img": "assets/suivi_rdv.webp", "w": 522, "h": 1600}, "tats_vides": {"id": "tats_vides", "title": "États vides & erreurs", "desc": "Localisation refusée, aucun salon dans le rayon, créneau pris. Cas limites traités proprement, sans illustration lourde.", "cta": "Retour à la recherche", "img": "assets/tats_vides.webp", "w": 404, "h": 1600}, "accueil_tempo": {"id": "accueil_tempo", "title": "Accueil (app cliente)", "desc": "Écran d'accueil de l'app cliente : bannière de réservation, catégories, experts recommandés à Cotonou. Navigation basse Accueil / RDV / Profil.", "cta": "Réserver maintenant", "img": "assets/accueil_tempo.webp", "w": 505, "h": 1600}, "services_tempo": {"id": "services_tempo", "title": "Choix des prestations", "desc": "Sélection d'un ou plusieurs soins pour la séance, avec choix de l'expert et total estimé en FCFA. Encart abonnement VIP.", "cta": "Continuer", "img": "assets/services_tempo.webp", "w": 467, "h": 1600}, "r_server_tempo": {"id": "r_server_tempo", "title": "Prendre RDV (app)", "desc": "Sélecteur de créneaux dans l'app cliente : bande de dates, créneaux Matin/Après-midi/Soirée, récap collant « RDV sélectionné ».", "cta": "Suivant", "img": "assets/r_server_tempo.webp", "w": 486, "h": 1600}, "mes_rdv_tempo": {"id": "mes_rdv_tempo", "title": "Mes rendez-vous", "desc": "Les réservations de la cliente : à venir, en attente, historique. Chaque carte porte son statut coloré (Confirmée / En attente / Terminé).", "cta": "Voir les détails", "img": "assets/mes_rdv_tempo.webp", "w": 534, "h": 1600}, "connexion_pro": {"id": "connexion_pro", "title": "Connexion pro", "desc": "Entrée de l'app professionnelle. Email + mot de passe uniquement — pas d'OTP, pas de SMS, pas de login social. Thème sombre Indigo Nuit.", "cta": "Se connecter", "img": "assets/connexion_pro.webp", "w": 706, "h": 1600}, "agenda_jour": {"id": "agenda_jour", "title": "Agenda — jour", "desc": "L'écran central. Timeline horaire, ligne « maintenant », blocs de RDV colorés par statut, RDV saisis à la main. Utile même sans une seule cliente TEMPO.", "cta": "Nouveau rendez-vous", "img": "assets/agenda_jour.webp", "w": 377, "h": 1600}, "nouveau_rdv_manuel": {"id": "nouveau_rdv_manuel", "title": "Nouveau RDV manuel", "desc": "La saisie manuelle qui rend TEMPO utile dès le premier jour : le pro note ses walk-ins. Alerte de chevauchement si le créneau est déjà pris.", "cta": "Enregistrer", "img": "assets/nouveau_rdv_manuel.webp", "w": 706, "h": 1600}, "statistiques": {"id": "statistiques", "title": "Statistiques", "desc": "CA du mois, nombre de RDV, taux d'absence, fiabilité. Graphe de revenu par semaine et heures creuses. Chiffres tabulaires alignés.", "cta": "Retour à l'agenda", "img": "assets/statistiques.webp", "w": 452, "h": 1600}, "profil_pro": {"id": "profil_pro", "title": "Profil & abonnement", "desc": "Fiche du salon, prestations, horaires, position. Carte d'abonnement : pilote gratuit puis 1 USD/mois. Aperçu public de la fiche.", "cta": "Retour à l'agenda", "img": "assets/profil_pro.webp", "w": 496, "h": 1600}, "tableau_de_bord_tempo_admin": {"id": "tableau_de_bord_tempo_admin", "title": "Tableau de bord", "desc": "Console d'admin du porteur. KPI (pros inscrits, publiés, réservations, taux de confirmation/absence), courbe de réservations, entonnoir de conversion.", "cta": "Voir les professionnels", "img": "assets/tableau_de_bord_tempo_admin.webp", "w": 1280, "h": 1134}, "liste_des_professionnels_tempo_admin": {"id": "liste_des_professionnels_tempo_admin", "title": "Professionnels", "desc": "Table dense : salon, ville, réservations 30 j, fiabilité, abonnement, publication. Tri, filtres, actions groupées.", "cta": "Ouvrir un professionnel", "img": "assets/liste_des_professionnels_tempo_admin.webp", "w": 1280, "h": 1024}, "d_tail_professionnel_tempo_admin": {"id": "d_tail_professionnel_tempo_admin", "title": "Détail professionnel", "desc": "Fiche identité, bascule de publication, abonnement, onglet Score. Le score de fiabilité est décomposé en faits — aucun avis libre.", "cta": "Voir les réservations", "img": "assets/d_tail_professionnel_tempo_admin.webp", "w": 1280, "h": 1479}, "gestion_des_r_servations_tempo_admin": {"id": "gestion_des_r_servations_tempo_admin", "title": "Réservations", "desc": "Toutes les réservations avec statut coloré. Une ligne se déplie pour montrer la timeline des notifications (créée, confirmée, rappels J-1 / H-1).", "cta": "Retour au tableau de bord", "img": "assets/gestion_des_r_servations_tempo_admin.webp", "w": 1280, "h": 1024}}, "surfaces": [{"key": "web", "name": "Web cliente", "sub": "Réservation invité, sans compte", "device": "phone", "tone": "light", "flow": ["recherche_liste", "profil_salon", "choix_cr_neau", "r_servation_invit", "confirmation", "suivi_rdv"], "variants": ["recherche_carte", "cr_neau_indisponible_modal", "tats_vides"]}, {"key": "app", "name": "App cliente", "sub": "Réservation depuis l'app", "device": "phone", "tone": "light", "flow": ["accueil_tempo", "services_tempo", "r_server_tempo", "mes_rdv_tempo"], "variants": []}, {"key": "pro", "name": "App pro", "sub": "Agenda & gestion du salon", "device": "phone", "tone": "dark", "flow": ["connexion_pro", "agenda_jour", "nouveau_rdv_manuel", "statistiques", "profil_pro"], "variants": []}, {"key": "admin", "name": "Admin", "sub": "Console du porteur (web)", "device": "browser", "tone": "light", "flow": ["tableau_de_bord_tempo_admin", "liste_des_professionnels_tempo_admin", "d_tail_professionnel_tempo_admin", "gestion_des_r_servations_tempo_admin"], "variants": []}]};
+const ICONS = {
+  chevL:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  chevR:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
+  arrowR:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  scroll:'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>',
+  cross:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 9l6 6M15 9l-6 6"/><circle cx="12" cy="12" r="9"/></svg>',
+  moon:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'
+};
+const SBICONS =
+  '<svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor" aria-hidden="true"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="5" y="4.5" width="3" height="7.5" rx="1"/><rect x="10" y="2" width="3" height="10" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1" opacity=".35"/></svg>'
+  +'<svg width="17" height="12" viewBox="0 0 17 12" fill="currentColor" aria-hidden="true"><path d="M8.5 2C5.5 2 2.9 3.2 1 5l1.6 1.6C4.1 5.1 6.2 4 8.5 4s4.4 1.1 5.9 2.6L16 5C14.1 3.2 11.5 2 8.5 2z" opacity=".85"/><path d="M8.5 6.2c-1.6 0-3 .6-4.1 1.7L8.5 12l4.1-4.1C11.5 6.8 10.1 6.2 8.5 6.2z"/></svg>'
+  +'<svg width="27" height="13" viewBox="0 0 27 13" fill="none" aria-hidden="true"><rect x=".5" y=".5" width="22" height="12" rx="3.2" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="9" rx="1.6" fill="currentColor"/><rect x="24" y="4" width="2.2" height="5" rx="1.1" fill="currentColor" opacity=".5"/></svg>';
+const MARK = '<svg width="24" height="24" viewBox="0 0 32 32" fill="none" stroke="#E0A458" stroke-width="2.4" stroke-linecap="round"><circle cx="16" cy="16" r="12.5" stroke-dasharray="63 16" stroke-dashoffset="-7"/><path d="M16 16V6.5"/><path d="M16 16h8"/><circle cx="16" cy="16" r="1.4" fill="#E0A458" stroke="none"/></svg>';
+
+document.querySelector('.mark').innerHTML = MARK;
+document.getElementById('prev').innerHTML = ICONS.chevL;
+document.getElementById('next').innerHTML = ICONS.chevR;
+document.getElementById('theme').innerHTML = ICONS.moon;
+document.getElementById('guide').innerHTML = ICONS.cross + ' Zones cliquables';
+
+const S = DATA.screens, SURF = DATA.surfaces;
+let si = 0, pi = 0;
+function order(s){ return s.flow.concat(s.variants); }
+function curSurface(){ return SURF[si]; }
+
+const tabsEl = document.getElementById('tabs');
+SURF.forEach((s,i)=>{
+  const b=document.createElement('button');
+  b.className='tab'; b.setAttribute('role','tab'); b.setAttribute('aria-selected', i===0);
+  b.innerHTML='<b>'+s.name+'</b><small>'+s.sub+'</small>';
+  b.onclick=()=>{ si=i; pi=0; render(); };
+  tabsEl.appendChild(b);
+});
+
+function buildDevice(surface, scr){
+  const scroller = '<div class="scroller" id="scroller"><img src="'+scr.img+'" width="'+scr.w+'" height="'+scr.h+'" alt="'+scr.title+'" decoding="async"></div>'
+    + '<div class="scrollhint">'+ICONS.scroll+' défiler</div>'
+    + '<button class="hotspot" id="hotspot">'+scr.cta+' '+ICONS.arrowR+'</button>';
+  if(surface.device==='browser'){
+    return '<div class="browser"><div class="bbar">'
+      +'<span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>'
+      +'<span class="burl">admin.tempo.bj/'+scr.id.replace(/_tempo_admin$/,'').replace(/_/g,'-')+'</span></div>'
+      +'<div class="screen">'+scroller+'</div></div>';
+  }
+  return '<div class="phone">'
+    +'<div class="screen tone-'+surface.tone+'">'
+    +'<div class="statusbar"><span class="sbtime tnum">9:41</span><span class="sbicons">'+SBICONS+'</span></div>'
+    +'<div class="island"></div>'+ scroller +'<div class="homebar"></div>'
+    +'</div></div>';
+}
+
+function render(){
+  const surface = curSurface(); const ord = order(surface);
+  if(pi>=ord.length) pi=0;
+  const id = ord[pi], scr = S[id], flowLen = surface.flow.length, inFlow = pi < flowLen;
+  [...tabsEl.children].forEach((c,i)=>c.setAttribute('aria-selected', i===si));
+  document.getElementById('device').innerHTML = buildDevice(surface, scr);
+  document.getElementById('hotspot').onclick = ()=>{ pi = inFlow ? (pi+1)%flowLen : 0; render(); };
+  document.getElementById('prev').disabled = (pi===0);
+  document.getElementById('next').disabled = (pi>=ord.length-1);
+  const dots = document.getElementById('dots'); dots.innerHTML='';
+  surface.flow.forEach((_,i)=>{
+    const d=document.createElement('button'); d.className='pdot';
+    d.setAttribute('aria-current', i===pi && inFlow); d.setAttribute('aria-label','Étape '+(i+1));
+    d.onclick=()=>{ pi=i; render(); }; dots.appendChild(d);
+  });
+  const rail=document.getElementById('rail'); rail.innerHTML='';
+  const addThumb=(id2,idx,label)=>{
+    const s2=S[id2]; const b=document.createElement('button');
+    b.className='thumb'; b.setAttribute('aria-current', id2===id);
+    b.innerHTML='<img src="'+s2.img+'" alt="" loading="lazy" decoding="async"><span>'+s2.title+'<small>'+(label||('Étape '+(idx+1)))+'</small></span>';
+    b.onclick=()=>{ pi = ord.indexOf(id2); render(); }; rail.appendChild(b);
+  };
+  surface.flow.forEach((id2,i)=>addThumb(id2,i,null));
+  if(surface.variants.length){
+    const sep=document.createElement('div'); sep.className='railsep'; sep.textContent='Variantes & états';
+    rail.appendChild(sep);
+    surface.variants.forEach((id2)=>addThumb(id2,0,'Variante'));
+  }
+  const info=document.getElementById('info');
+  const stepTxt = inFlow ? ('Étape '+(pi+1)+' / '+flowLen) : 'Variante / état';
+  info.innerHTML =
+    '<div class="step">'+surface.name+' · '+stepTxt+'</div>'
+    +'<h3>'+scr.title+'</h3><p>'+scr.desc+'</p>'
+    +'<div class="tolook"><b>À faire sur cet écran</b><span class="cta">'+scr.cta+' '+ICONS.arrowR+'</span></div>'
+    + ((surface.key==='pro'||surface.key==='web') ?
+      '<div class="legend"><b>Statuts visibles</b>'
+      +'<div class="st"><span class="sdot" style="background:#D9880E"></span> En attente</div>'
+      +'<div class="st"><span class="sdot" style="background:#16A34A"></span> Confirmée</div>'
+      +'<div class="st"><span class="sdot" style="background:#6B6760"></span> Terminée</div>'
+      +'<div class="st"><span class="sdot" style="background:#DC2626"></span> Annulée</div>'
+      +'<div class="st"><span class="sdot" style="background:#7C2D12"></span> Absente</div></div>' : '');
+  const sc=document.getElementById('scroller'); if(sc) sc.scrollTop=0;
+}
+document.getElementById('prev').onclick=()=>{ if(pi>0){pi--;render();} };
+document.getElementById('next').onclick=()=>{ const ord=order(curSurface()); if(pi<ord.length-1){pi++;render();} };
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'&&pi>0){pi--;render();}
+  if(e.key==='ArrowRight'){ const ord=order(curSurface()); if(pi<ord.length-1){pi++;render();} }
+});
+const guide=document.getElementById('guide');
+guide.onclick=()=>{ const on=document.body.classList.toggle('noguide'); guide.classList.toggle('on', !on); guide.setAttribute('aria-pressed', String(!on)); };
+document.getElementById('theme').onclick=()=>{
+  const cur=document.documentElement.getAttribute('data-theme');
+  const isDark = cur ? cur==='dark' : matchMedia('(prefers-color-scheme:dark)').matches;
+  document.documentElement.setAttribute('data-theme', isDark?'light':'dark');
+};
+render();
+</script>
+</body>
+</html>
