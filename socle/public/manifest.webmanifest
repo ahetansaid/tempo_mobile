@@ -1,0 +1,20 @@
+{
+  "name": "TEMPO — Coiffeurs & barbiers",
+  "short_name": "TEMPO",
+  "description": "Trouve un coiffeur ou un barbier près de toi et réserve en quelques secondes.",
+  "start_url": "/recherche?src=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#141B34",
+  "theme_color": "#141B34",
+  "orientation": "portrait",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["lifestyle", "shopping"],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

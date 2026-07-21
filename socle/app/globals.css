@@ -9,6 +9,9 @@
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+.dl { scroll-margin-top: 66px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
   background: var(--sable);
   color: var(--ink);
@@ -457,6 +460,19 @@ a { color: var(--brass); text-decoration: none; }
 .dl-store .tx .b { font-family: var(--font-sora); font-weight: 800; font-size: 17px; }
 .dl-soon { position: absolute; top: -9px; right: -8px; background: var(--brass); color: var(--indigo);
   font-size: 10px; font-weight: 800; letter-spacing: .04em; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; }
+.dl-actions { margin-top: 30px; }
+@media (max-width: 900px) { .dl-actions { display: flex; flex-direction: column; align-items: center; } }
+.dl-install { display: inline-flex; align-items: center; gap: 10px; height: 58px; padding: 0 30px; border-radius: 14px;
+  font-family: var(--font-sora); font-weight: 800; font-size: 17px; border: none; cursor: pointer;
+  background: var(--brass); color: var(--indigo); box-shadow: 0 12px 34px rgba(224,164,88,.32);
+  transition: transform .12s, box-shadow .12s, filter .12s; }
+.dl-install:hover { transform: translateY(-2px); filter: brightness(1.04); box-shadow: 0 16px 40px rgba(224,164,88,.42); }
+.dl-installed { display: inline-flex; align-items: center; gap: 9px; height: 58px; padding: 0 26px; border-radius: 14px;
+  font-family: var(--font-sora); font-weight: 700; font-size: 16px; color: #86efac;
+  background: rgba(22,163,74,.14); border: 1px solid rgba(22,163,74,.4); }
+.dl-ioshint { margin: 12px 2px 0; color: rgba(255,255,255,.72); font-size: 13.5px; max-width: 40ch; }
+.dl-ioshint b { color: #fff; }
+.dl-actions .dl-stores { margin-top: 16px; }
 
 /* mockups téléphones */
 .dl-phones { position: relative; height: 480px; display: flex; align-items: center; justify-content: center; }

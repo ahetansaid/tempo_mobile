@@ -3,6 +3,7 @@ import type { CSSProperties, SVGProps } from 'react';
 import Link from 'next/link';
 import { rechercherSalons } from '@/lib/salons';
 import ScrollReveal from './_components/scroll-reveal';
+import InstallButton from './_components/install-button';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,7 +31,7 @@ export default async function Landing() {
           <Link href="/" className="lp-brand"><Mark /><span className="wm">TEMPO</span></Link>
           <span className="sp" />
           <a href="#comment" className="lp-nav-link" style={{ marginRight: 18 }}>Comment ça marche</a>
-          <Link href="/recherche" className="lp-cta-sm">Trouver un salon</Link>
+          <a href="#app" className="lp-cta-sm">Trouver un salon</a>
         </div>
       </nav>
 
@@ -40,9 +41,9 @@ export default async function Landing() {
           <div>
             <span className="lp-eyebrow reveal"><Dot /> Cotonou · Abomey-Calavi</span>
             <h1 className="lp-h1 reveal" style={d(80)}>Le bon créneau,<br /><span className="accent">au bon moment.</span></h1>
-            <p className="lp-lead reveal" style={d(160)}>Trouve un coiffeur ou un barbier près de toi et réserve en 30 secondes — sans créer de compte.</p>
+            <p className="lp-lead reveal" style={d(160)}>Trouve un coiffeur ou un barbier près de toi et réserve en quelques secondes. Toute l’expérience TEMPO, dans une seule app.</p>
             <div className="lp-cta-row reveal" style={d(240)}>
-              <Link href="/recherche" className="lp-btn">Trouver un salon <Arrow /></Link>
+              <a href="#app" className="lp-btn">Trouver un salon <Arrow /></a>
               <a href="#comment" className="lp-btn-ghost">Comment ça marche</a>
             </div>
             <div className="lp-trust reveal" style={d(320)}>
@@ -143,7 +144,7 @@ export default async function Landing() {
       )}
 
       {/* TÉLÉCHARGE L'APP */}
-      <section className="dl">
+      <section className="dl" id="app">
         <div className="dl-in">
           <div>
             <span className="dl-eyebrow reveal"><Dot /> Bientôt disponible</span>
@@ -154,9 +155,12 @@ export default async function Landing() {
               <div className="dl-li"><Check /> Tes rendez-vous toujours avec toi</div>
               <div className="dl-li"><Check /> Rappel 1 h avant — tu n’oublies plus</div>
             </div>
-            <div className="dl-stores reveal" style={d(240)}>
-              <span className="dl-store"><AppleIco /><span className="tx"><span className="s">Bientôt sur</span><span className="b">App Store</span></span><span className="dl-soon">Bientôt</span></span>
-              <span className="dl-store"><PlayIco /><span className="tx"><span className="s">Bientôt sur</span><span className="b">Google Play</span></span><span className="dl-soon">Bientôt</span></span>
+            <div className="dl-actions reveal" style={d(240)}>
+              <InstallButton />
+              <div className="dl-stores">
+                <span className="dl-store"><AppleIco /><span className="tx"><span className="s">Bientôt sur</span><span className="b">App Store</span></span><span className="dl-soon">Bientôt</span></span>
+                <span className="dl-store"><PlayIco /><span className="tx"><span className="s">Bientôt sur</span><span className="b">Google Play</span></span><span className="dl-soon">Bientôt</span></span>
+              </div>
             </div>
           </div>
           <div className="dl-phones reveal" style={d(160)}>
@@ -173,7 +177,7 @@ export default async function Landing() {
             <h2>Tu es coiffeur ou barbier ?</h2>
             <p>Reçois tes réservations, gère ton agenda et remplis tes heures creuses. Ton salon, à l’heure.</p>
           </div>
-          <Link href="/pro" className="lp-btn-ghost reveal" style={d(120)}>Créer mon salon <Arrow /></Link>
+          <a href="#app" className="lp-btn-ghost reveal" style={d(120)}>Créer mon salon <Arrow /></a>
         </div>
       </section>
 
@@ -181,7 +185,7 @@ export default async function Landing() {
       <section className="lp-final">
         <h2 className="reveal">Ton prochain rendez-vous t’attend</h2>
         <p className="reveal" style={d(80)}>Trouve un salon ouvert près de toi et réserve en quelques secondes.</p>
-        <div className="reveal" style={d(160)}><Link href="/recherche" className="lp-btn">Trouver un salon <Arrow /></Link></div>
+        <div className="reveal" style={d(160)}><a href="#app" className="lp-btn">Trouver un salon <Arrow /></a></div>
       </section>
 
       {/* FOOTER */}
@@ -189,6 +193,7 @@ export default async function Landing() {
         <div className="lp-footer-in">
           <Mark /><span className="wm">TEMPO</span>
           <span className="sp" />
+          <Link href="/pro" style={{ color: 'rgba(255,255,255,.7)', marginRight: 18 }}>Espace pro</Link>
           <span>Coiffeurs &amp; barbiers · Cotonou, Bénin</span>
         </div>
       </footer>
