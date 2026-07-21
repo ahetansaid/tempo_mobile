@@ -492,6 +492,12 @@ a { color: var(--brass); text-decoration: none; }
 
 /* ============================ Raffinements mobile (landing) ============================ */
 .lp, .lp-hero, .dl, .lp-pro { overflow-x: clip; }
+html, body { overflow-x: hidden; }
+img { max-width: 100%; }
+/* Empêche les items grid/flex de déborder sous leur contenu (débordement horizontal). */
+.lp-hero-in > *, .dl-in > *, .lp-pro-in > *, .lp-footer-in > * { min-width: 0; }
+.lp-feat, .lp-card, .lp-step, .dl-store, .lp-trust span { min-width: 0; }
+.lp-h1, .lp-h2, .dl-h2, .lp-lead, .dl-lead, .lp-step p, .lp-feat p { overflow-wrap: break-word; }
 
 @media (max-width: 900px) {
   .lp-sec { padding: 56px 18px; }
