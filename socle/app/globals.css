@@ -489,6 +489,69 @@ a { color: var(--brass); text-decoration: none; }
 .app-phone.front { transform: translateX(58px) rotate(4deg); z-index: 2; animation: lp-floaty 6s ease-in-out infinite; }
 @media (max-width: 480px) { .app-phone { width: 190px; } .app-phone.back { transform: translateX(-48px) rotate(-8deg) scale(.88); } .app-phone.front { transform: translateX(44px) rotate(4deg); } }
 @media (prefers-reduced-motion: reduce) { .app-phone.front { animation: none !important; } }
+
+/* ============================ Raffinements mobile (landing) ============================ */
+.lp, .lp-hero, .dl, .lp-pro { overflow-x: clip; }
+
+@media (max-width: 900px) {
+  .lp-sec { padding: 56px 18px; }
+  .dl-in { padding: 52px 18px; }
+}
+
+@media (max-width: 640px) {
+  /* Nav */
+  .lp-nav-in { padding: 12px 16px; gap: 8px; }
+  .lp-nav-link { display: none; }
+  .lp-cta-sm { padding: 9px 14px; font-size: 13.5px; }
+  .lp-brand .wm { font-size: 17px; }
+
+  /* Hero */
+  .lp-hero-in { padding: 30px 18px 46px; gap: 30px; }
+  .lp-h1 { font-size: clamp(31px, 10.5vw, 44px); }
+  .lp-lead { font-size: 16px; }
+  .lp-cta-row { flex-direction: column; gap: 10px; }
+  .lp-cta-row .lp-btn, .lp-cta-row .lp-btn-ghost { width: 100%; height: 52px; font-size: 15.5px; }
+  .lp-trust { gap: 10px 16px; margin-top: 24px; }
+  .lp-visual { width: 100%; max-width: 300px; margin: 6px auto 0; padding-bottom: 26px; }
+  .lp-preview { left: 0; width: 84%; }
+  .lp-float { top: 2px; right: 2px; }
+
+  /* Sections claires */
+  .lp-sec { padding: 46px 18px; }
+  .lp-h2 { font-size: clamp(24px, 7.4vw, 34px); }
+  .lp-subtitle { font-size: 15px; }
+  .lp-steps, .lp-feats { gap: 12px; margin-top: 24px; }
+  .lp-step { padding: 22px 18px; }
+  .lp-cards { grid-template-columns: 1fr; margin-top: 24px; }
+  .lp-feat .ico { width: 42px; height: 42px; }
+
+  /* Section app */
+  .dl-in { padding: 46px 18px; gap: 26px; }
+  .dl-h2 { font-size: clamp(26px, 8.4vw, 40px); }
+  .dl-lead { font-size: 15.5px; }
+  .dl-install { width: 100%; justify-content: center; height: 54px; }
+  .dl-stores { justify-content: center; gap: 10px; }
+  .dl-store { flex: 1 1 0; min-width: 0; justify-content: center; padding: 0 12px; height: 52px; }
+  .dl-store .tx .b { font-size: 15px; }
+  .dl-phones { height: 372px; }
+  .app-phone { width: 176px; }
+  .app-phone.back { transform: translateX(-44px) rotate(-8deg) scale(.86); }
+  .app-phone.front { transform: translateX(40px) rotate(4deg); }
+
+  /* Bande pro + CTA final + footer */
+  .lp-pro-in { padding: 44px 18px; gap: 18px; }
+  .lp-pro-in .lp-btn-ghost { width: 100%; }
+  .lp-final { padding: 60px 18px; }
+  .lp-final .lp-btn { width: 100%; }
+  .lp-footer-in { padding: 26px 18px; row-gap: 6px; }
+}
+
+@media (max-width: 420px) {
+  .app-phone.back { display: none; }         /* un seul téléphone : plus net */
+  .app-phone.front { transform: rotate(3deg); }
+  .dl-phones { height: 348px; }
+  .dl-store .tx .s { font-size: 10px; }
+}
 code {
   font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
   background: #fff;
