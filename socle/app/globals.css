@@ -552,12 +552,12 @@ a { color: var(--brass); text-decoration: none; }
 .ob-card .tx { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .ob-card .tx b { font-family: var(--font-sora); font-weight: 700; font-size: 17px; }
 .ob-card .tx small { font-size: 13px; opacity: .8; }
-.ob-card.cliente { background: #f6f0e6; color: var(--indigo); box-shadow: 0 12px 30px rgba(0,0,0,.28); }
-.ob-card.cliente .ic { background: var(--indigo); color: var(--brass); }
-.ob-card.cliente:hover { box-shadow: 0 18px 40px rgba(0,0,0,.36); }
-.ob-card.pro { background: linear-gradient(135deg, #1c2647, #141b34); color: #fff; border-color: rgba(224,164,88,.3); }
-.ob-card.pro .ic { background: var(--brass); color: var(--indigo); }
-.ob-card.pro:hover { border-color: var(--brass); box-shadow: 0 18px 40px rgba(0,0,0,.4); }
+.ob-card.oc-cliente { background: #f6f0e6; color: var(--indigo); box-shadow: 0 12px 30px rgba(0,0,0,.28); }
+.ob-card.oc-cliente .ic { background: var(--indigo); color: var(--brass); }
+.ob-card.oc-cliente:hover { box-shadow: 0 18px 40px rgba(0,0,0,.36); }
+.ob-card.oc-pro { background: linear-gradient(135deg, #1c2647, #141b34); color: #fff; border-color: rgba(224,164,88,.3); }
+.ob-card.oc-pro .ic { background: var(--brass); color: var(--indigo); }
+.ob-card.oc-pro:hover { border-color: var(--brass); box-shadow: 0 18px 40px rgba(0,0,0,.4); }
 .ob-card svg:last-child { color: currentColor; opacity: .5; flex: none; }
 .ob-note { text-align: center; color: rgba(255,255,255,.45); font-size: 13px; margin: 8px 0 0; }
 @keyframes ob-cardin { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }

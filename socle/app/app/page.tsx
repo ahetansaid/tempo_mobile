@@ -62,12 +62,12 @@ export default function AppEntry() {
             <h1>Tu es… ?</h1>
             <p>Choisis ton espace, on s’occupe du reste.</p>
           </div>
-          <button className="ob-card cliente" onClick={() => choisir('cliente')} style={{ animationDelay: '.05s' }}>
+          <button className="ob-card oc-cliente" onClick={() => choisir('cliente')} style={{ animationDelay: '.05s' }}>
             <span className="ic"><Ico d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3" /></span>
             <span className="tx"><b>Je cherche un coiffeur</b><small>Trouve un salon et réserve en 30 secondes.</small></span>
             <Arrow />
           </button>
-          <button className="ob-card pro" onClick={() => choisir('pro')} style={{ animationDelay: '.14s' }}>
+          <button className="ob-card oc-pro" onClick={() => choisir('pro')} style={{ animationDelay: '.14s' }}>
             <span className="ic"><Ico d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6" /></span>
             <span className="tx"><b>Je gère un salon</b><small>Reçois tes réservations, gère ton agenda.</small></span>
             <Arrow />
