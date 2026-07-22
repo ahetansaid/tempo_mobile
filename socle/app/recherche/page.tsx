@@ -24,6 +24,10 @@ export default async function RecherchePage() {
       <div className="fo-top">
         <ClockMark />
         <span className="wm">TEMPO</span>
+        <Link href="/app" className="fo-switch">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3L4 7l4 4M4 7h16M16 21l4-4-4-4M20 17H4" /></svg>
+          Changer d’espace
+        </Link>
       </div>
 
       <h1 className="fo-h1">Trouve un salon près de toi</h1>

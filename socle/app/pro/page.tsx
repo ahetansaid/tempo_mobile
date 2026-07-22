@@ -1,5 +1,6 @@
 // Entrée de l'espace professionnel (thème sombre « app pro »).
 import Link from 'next/link';
+import ProAccount from '../_components/pro-account';
 
 export const metadata = { title: 'TEMPO Pro — Ton salon, à l’heure' };
 
@@ -33,6 +34,8 @@ export default function ProEntry() {
           <Link href="/pro/onboarding" className="pro-btn">Créer mon salon <Ico d="M5 12h14M13 6l6 6-6 6" w={18} /></Link>
           <Link href="/pro/connexion" className="pro-ghost">J’ai déjà un compte</Link>
         </div>
+
+        <ProAccount />
       </div>
     </div>
   );

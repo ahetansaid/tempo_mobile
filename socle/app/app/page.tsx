@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
-type Phase = 'loading' | 'splash' | 'intro' | 'fork';
+type Phase = 'loading' | 'splash' | 'intro' | 'fork' | 'terms';
 
 const SLIDES = [
   { ic: 'pin', titre: 'Le bon créneau,\nau bon moment', txt: 'Trouve un coiffeur ou un barbier près de toi, en un instant.' },
@@ -14,21 +15,38 @@ export default function AppEntry() {
   const router = useRouter();
   const [phase, setPhase] = useState<Phase>('loading');
   const [slide, setSlide] = useState(0);
+  const [pending, setPending] = useState<{ role: string; dest: string } | null>(null);
+  const [accepte, setAccepte] = useState(false);
   const touch = useRef<number | null>(null);
 
+  // À l'ouverture : on montre l'intro la 1re fois, sinon on revient direct au choix de persona.
   useEffect(() => {
-    let role: string | null = null;
-    try { role = localStorage.getItem('tempo_role'); } catch {}
-    if (role === 'cliente') { router.replace('/recherche'); return; }
-    if (role === 'pro') { router.replace('/pro'); return; }
+    let seen = false;
+    try { seen = localStorage.getItem('tempo_seen_intro') === '1'; } catch {}
+    if (seen) { setPhase('fork'); return; }
     setPhase('splash');
     const t = setTimeout(() => setPhase('intro'), 1700);
     return () => clearTimeout(t);
-  }, [router]);
+  }, []);
+
+  function allerFork() {
+    try { localStorage.setItem('tempo_seen_intro', '1'); } catch {}
+    setPhase('fork');
+  }
 
   function choisir(role: 'cliente' | 'pro') {
     try { localStorage.setItem('tempo_role', role); } catch {}
-    router.push(role === 'cliente' ? '/recherche' : '/pro');
+    const dest = role === 'cliente' ? '/recherche' : '/pro';
+    let terms = false;
+    try { terms = localStorage.getItem('tempo_terms') === '1'; } catch {}
+    if (terms) { router.push(dest); return; }
+    setPending({ role, dest });
+    setPhase('terms');
+  }
+
+  function accepter() {
+    try { localStorage.setItem('tempo_terms', '1'); } catch {}
+    if (pending) router.push(pending.dest);
   }
 
   const onTouchStart = (e: React.TouchEvent) => { touch.current = e.touches[0].clientX; };
@@ -45,10 +63,7 @@ export default function AppEntry() {
   if (phase === 'splash') {
     return (
       <div className="ob ob-center">
-        <div className="ob-splash">
-          <Logo draw />
-          <span className="ob-wm">TEMPO</span>
-        </div>
+        <div className="ob-splash"><Logo draw /><span className="ob-wm">TEMPO</span></div>
       </div>
     );
   }
@@ -72,7 +87,28 @@ export default function AppEntry() {
             <span className="tx"><b>Je gère un salon</b><small>Reçois tes réservations, gère ton agenda.</small></span>
             <Arrow />
           </button>
-          <p className="ob-note">Tu pourras changer plus tard.</p>
+          <p className="ob-note">Tu reviens ici à chaque ouverture pour choisir ton espace.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (phase === 'terms') {
+    return (
+      <div className="ob">
+        <div className="ob-terms">
+          <Logo />
+          <h1>Avant de commencer</h1>
+          <p>Une dernière étape, puis tu accèdes à ton espace.</p>
+          <label className="ob-check">
+            <input type="checkbox" checked={accepte} onChange={(e) => setAccepte(e.target.checked)} />
+            <span className="box" aria-hidden>{accepte && <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg>}</span>
+            <span className="lbl">J’ai lu et j’accepte les <Link href="/confidentialite" className="ob-a">règles d’utilisation</Link> et la <Link href="/confidentialite#confidentialite" className="ob-a">politique de confidentialité</Link> de TEMPO.</span>
+          </label>
+          <div className="ob-terms-cta">
+            <button className="ob-btn" disabled={!accepte} onClick={accepter}>Accepter et continuer <Arrow /></button>
+            <button className="ob-link" onClick={() => setPhase('fork')}>Retour</button>
+          </div>
         </div>
       </div>
     );
@@ -83,7 +119,7 @@ export default function AppEntry() {
   return (
     <div className="ob">
       <div className="ob-intro">
-        <div className="ob-skip"><button className="ob-link" onClick={() => setPhase('fork')}>Passer</button></div>
+        <div className="ob-skip"><button className="ob-link" onClick={allerFork}>Passer</button></div>
         <div className="ob-viewport" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
           <div className="ob-track" style={{ transform: `translateX(-${slide * 100}%)` }}>
             {SLIDES.map((s, i) => (
@@ -99,7 +135,7 @@ export default function AppEntry() {
           {SLIDES.map((_, i) => <button key={i} className={i === slide ? 'on' : ''} onClick={() => setSlide(i)} aria-label={`Slide ${i + 1}`} />)}
         </div>
         <div className="ob-nav">
-          <button className="ob-btn" onClick={() => (dernier ? setPhase('fork') : setSlide(slide + 1))}>
+          <button className="ob-btn" onClick={() => (dernier ? allerFork() : setSlide(slide + 1))}>
             {dernier ? 'Commencer' : 'Continuer'} <Arrow />
           </button>
         </div>
