@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { rechercherSalons } from '@/lib/salons';
 import ScrollReveal from './_components/scroll-reveal';
 import InstallButton from './_components/install-button';
+import PhoneShowcase from './_components/phone-showcase';
 
 export const dynamic = 'force-dynamic';
 
@@ -163,10 +164,7 @@ export default async function Landing() {
               </div>
             </div>
           </div>
-          <div className="dl-phones reveal" style={d(160)}>
-            <div className="app-phone back"><div className="scr"><div className="isl" /><img src="/app/mes-rdv.webp" alt="Mes rendez-vous dans l’app TEMPO" loading="lazy" /></div></div>
-            <div className="app-phone front"><div className="scr"><div className="isl" /><img src="/app/accueil.webp" alt="Accueil de l’app TEMPO" loading="lazy" /></div></div>
-          </div>
+          <div className="reveal" style={d(160)}><PhoneShowcase /></div>
         </div>
       </section>
 

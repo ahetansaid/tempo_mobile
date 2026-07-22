@@ -2,7 +2,7 @@
   "name": "TEMPO — Coiffeurs & barbiers",
   "short_name": "TEMPO",
   "description": "Trouve un coiffeur ou un barbier près de toi et réserve en quelques secondes.",
-  "start_url": "/recherche?src=pwa",
+  "start_url": "/app?src=pwa",
   "scope": "/",
   "display": "standalone",
   "background_color": "#141B34",
